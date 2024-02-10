@@ -48,3 +48,9 @@ h1 {
 .active {
     background-color: #ffcc66;
 }
+
+#bubble-sort-steps-count, #insertion-sort-steps-count, #selection-sort-steps-count, #merge-sort-steps-count, #quick-sort-steps-count {
+    width: 30rem;
+    margin-left: 32rem;
+    margin-top: -30px;
+}

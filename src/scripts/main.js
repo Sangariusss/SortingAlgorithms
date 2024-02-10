@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const originalArrayDiv = document.getElementById('original-array');
     const bubbleSortStepsDiv = document.getElementById('bubble-sort-steps');
+    const insertionSortStepsDiv = document.getElementById('insertion-sort-steps'); 
+    const selectionSortStepsDiv = document.getElementById('selection-sort-steps');
+    const mergeSortStepsDiv = document.getElementById('merge-sort-steps');
+    const quickSortStepsDiv = document.getElementById('quick-sort-steps');
 
     const originalArray = [15, 3, 2, 14, 15, 5, 10, 4, 5, 0];
     
@@ -12,47 +16,50 @@ document.addEventListener('DOMContentLoaded', function() {
         originalArrayDiv.appendChild(elementDiv);
     });
 
-    // Bubble Sort
-    function bubbleSort(array) {
-        let steps = [];
-        let n = array.length;
-        let swapped;
-        do {
-            swapped = false;
-            for (let i = 0; i < n - 1; i++) {
-                if (array[i] > array[i + 1]) {
-                    let temp = array[i];
-                    array[i] = array[i + 1];
-                    array[i + 1] = temp;
-                    swapped = true;
-                    steps.push([...array, i + 1]); // Record current step and index of the active element
-                }
-            }
-            n--;
-        } while (swapped);
-        return steps;
-    }
-
     // Execute Bubble Sort
     const bubbleSortSteps = bubbleSort(originalArray.slice());
-    displaySortingSteps(bubbleSortSteps);
+    const bubbleSortTotalSteps = displaySortingSteps(bubbleSortSteps, bubbleSortStepsDiv, 'bubble-sort-steps-count');
 
-    // Function to display sorting steps
-    function displaySortingSteps(steps) {
-        steps.forEach((step, index) => {
-            setTimeout(() => {
-                displayStep(step, index, steps.length - 1 === index);
-            }, index * 500); // Change the delay time if needed
-        });
+    // Execute Insertion Sort
+    const insertionSortSteps = insertionSort(originalArray.slice());
+    const insertionSortTotalSteps = displaySortingSteps(insertionSortSteps, insertionSortStepsDiv, 'insertion-sort-steps-count');
+
+    // Execute Selection Sort
+    const selectionSortSteps = selectionSort(originalArray.slice());
+    const selectionSortTotalSteps = displaySortingSteps(selectionSortSteps, selectionSortStepsDiv, 'selection-sort-steps-count');
+
+    // Execute Merge Sort
+    const mergeSortSteps = mergeSort(originalArray.slice());
+    const mergeSortTotalSteps = displaySortingSteps(mergeSortSteps, mergeSortStepsDiv, 'merge-sort-steps-count');
+
+    // Execute Quick Sort
+    const quickSortSteps = quickSort(originalArray.slice());
+    const quickSortTotalSteps = displaySortingSteps(quickSortSteps, quickSortStepsDiv, 'quick-sort-steps-count');
+
+    // Function to display sorting steps and return the total number of steps
+    function displaySortingSteps(steps, stepsDiv, stepsCountId) {
+        let stepCount = 0;
+        const stepsCountDiv = document.getElementById(stepsCountId);
+        const interval = setInterval(() => {
+            if (stepCount < steps.length) {
+                displayStep(steps[stepCount], stepCount, steps.length - 1 === stepCount, stepsDiv);
+                stepCount++;
+                stepsCountDiv.textContent = `Total Steps: ${stepCount}`;
+            } else {
+                clearInterval(interval);
+            }
+        }, 500); // Change the delay time if needed
+
+        return steps.length;
     }
 
     // Function to display a sorting step
-    function displayStep(step, stepIndex, isLastStep) {
+    function displayStep(step, stepIndex, isLastStep, stepsDiv) {
         const currentArray = step.slice(0, -1); // Get the array from the step data
         const activeIndex = step.slice(-1)[0]; // Get the index of the active element from the step data
         
         // Clear previous steps
-        bubbleSortStepsDiv.innerHTML = '';
+        stepsDiv.innerHTML = '';
 
         // Display current step
         currentArray.forEach((element, index) => {
@@ -87,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 elementDiv.classList.add('active');
             }
 
-            bubbleSortStepsDiv.appendChild(elementDiv);
+            stepsDiv.appendChild(elementDiv);
         });
     }
 });
